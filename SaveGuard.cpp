@@ -12,6 +12,8 @@
 #include <fstream>
 #include <string>
 #include <windows.h>
+#include <stdio.h>
+#include <io.h>
 
 namespace fs = std::filesystem;
 
@@ -19,10 +21,11 @@ namespace fs = std::filesystem;
 
 int BackupSaves();
 bool LaunchBorderlands();
-bool CopyFile(fs::path src, fs::path dest);
+bool CopyFile(std::string source, std::string dest);
 
 // Const values
 
+const std::string BACKUP_FOLDER_PREFIX = "backups/";
 const std::string SHORTCUT_FILE_NAME = "Borderlands3.lnk";
 const std::string PROFILE_FILE_NAME = "profile.sav";
 const std::string SAVE_EXTENSION = ".sav";
@@ -36,6 +39,8 @@ int main() {
 	std::cout << "Please note, this program will not run correctly if it is not inside your Borderlands 3 save folder." << std::endl;
 	std::cout << "If it isn't, please close this window and move it now." << std::endl;
 
+	// Startup backup
+	mkdir("backups");
 	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
 	
 	if (!LaunchBorderlands()) {
@@ -50,10 +55,10 @@ int main() {
 			last_backup = std::time(0);;
 			
 			std::cout << "Backing up...";
-			BackupSaves();
+			std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
 			std:: cout << " done!" << std::endl;
 		} else {
-			std::cout << ".";
+			//std::cout << ".";
 		}
 	}
 }
@@ -62,7 +67,7 @@ int BackupSaves() {
 	int successes = 0;
 
 	for (int i = 0; i < MAX_NUMBER_OF_SAVES; ++i) {
-		std::string file_name = std::to_string(i) + SAVE_EXTENSION;
+		std::string file_name = std::to_string(i + 1) + SAVE_EXTENSION;
 
 		std::ifstream ifs;
 		ifs.open(file_name);
@@ -70,32 +75,34 @@ int BackupSaves() {
 		if(ifs.good()) {
 			ifs.close();
 
-			if (CopyFile(file_name, ("backup/" + file_name) )) successes++; 
+			if (CopyFile(file_name, ("backups/" + file_name) )) successes++; 
 
 		} else {
 			ifs.close();
+			std::cout << "Couldn't locate " << file_name << "!\n";
 		}
 	}
 
-	CopyFile(PROFILE_FILE_NAME, ("backup/" + PROFILE_FILE_NAME) ); // Backup the profile save file
+	CopyFile(PROFILE_FILE_NAME, ("backups/" + PROFILE_FILE_NAME) ); // Backup the profile save file
 
 	return successes;
 }
 
-bool CopyFile(fs::path src, fs::path dest) {
-	fs::path sourceFile = src;
-    fs::path targetParent = dest;
-    auto target = targetParent / sourceFile.filename(); // sourceFile.filename() returns "sourceFile.ext".
+bool CopyFile(std::string source, std::string dest) {
+	std::ifstream  src(source,    std::ios::binary);
 
-    try 
-    {
-        fs::create_directories(targetParent); // Recursively create target directory if not existing.
-        fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);
-    }
-    catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
-    {
-        return false;
-    }
+	if (src.good()) {
+ 		std::ofstream  dst(dest,   std::ios::binary);
+ 		dst << src.rdbuf();
+ 		dst.close();
+ 		src.close();
+	} else {
+		std::cout << "Failed to read " << source << "\n";
+		src.close();
+		return false;
+	}
+
+    
 
     return true;
 }
