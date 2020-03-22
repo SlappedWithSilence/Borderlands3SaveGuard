@@ -1,1 +1,1 @@
-g++ -std=c++17 -static-libgcc -static-libstdc++ SaveGuard.cpp
+g++ -std=c++17 -static-libgcc -static-libstdc++ SaveGuard.cpp -static
