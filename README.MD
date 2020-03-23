@@ -1,4 +1,4 @@
-USAGE:
+*USAGE:*
 
 In order to use this program, you must drop it into your BL3 save folder. For example, mine is located at:
 
@@ -10,6 +10,6 @@ Once you have place the executable and the BL3 shortcut BOTH INSIDE THE SAVE FOL
 
 I DO NOT PROVIDE ANY WARRANTY FOR THIS SOFTWARE. YOU MUST BACK UP YOUR FILES BY HAND BEFORE USING THIS PROGRAM TO ENSURE IT DOES NOT DESTROY YOUR SAVE FILES.
 
-BUILDING SAVEGUARD ON YOUR OWN MACHINE
+*BUILDING SAVEGUARD ON YOUR OWN MACHINE*
 
 If you would like to build Save Guard on your own machine, you must have access to C++17. Simply run the included makefile through CMD after installing a compatible version of GCC. I use MinGW.
