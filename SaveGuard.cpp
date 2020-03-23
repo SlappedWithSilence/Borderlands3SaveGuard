@@ -21,16 +21,20 @@ namespace fs = std::filesystem;
 
 int BackupSaves();
 bool LaunchBorderlands();
+
 bool CopyFile(std::string source, std::string dest);
+
 bool CreateConfigFile(std::string file_name);
+bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value)
 
 // Const values
 
 // Filename Constants
 const std::string BACKUP_FOLDER_PREFIX = "backups/";
-const std::string SHORTCUT_FILE_NAME = "Borderlands3.lnk";
-const std::string PROFILE_FILE_NAME = "profile.sav";
-const std::string SAVE_EXTENSION = ".sav";
+const std::string SHORTCUT_FILE_NAME   = "Borderlands3.lnk";
+const std::string PROFILE_FILE_NAME    = "profile.sav";
+const std::string CONFIG_FILE_NAME     = "config.cfg";
+const std::string SAVE_EXTENSION       = ".sav";
 
 // Prompt Constants
 const std::string BORDERLANDS_LAUNCH_FAILED = "Launching Borderlands failed, is the correct shortcut present in this folder?\n";
@@ -49,7 +53,7 @@ int main() {
 	// Startup backup
 	mkdir("backups");
 	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
-	
+
 	if (!LaunchBorderlands()) {
 		std::cout << BORDERLANDS_LAUNCH_FAILED;
 		return -1;
@@ -60,7 +64,7 @@ int main() {
 	while(true) {
 		if (std::time(0) - last_backup >= TIME_TO_BACKUP) {
 			last_backup = std::time(0);;
-			
+
 			std::cout << "Backing up...";
 			std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
 			std:: cout << " done!" << std::endl;
@@ -80,7 +84,7 @@ int BackupSaves() {
 		if(ifs.good()) {
 			ifs.close();
 
-			if (CopyFile(file_name, ("backups/" + file_name) )) successes++; 
+			if (CopyFile(file_name, ("backups/" + file_name) )) successes++;
 
 		} else {
 			ifs.close();
@@ -107,7 +111,7 @@ bool CopyFile(std::string source, std::string dest) {
 		return false;
 	}
 
-    
+
 
     return true;
 }
@@ -128,6 +132,48 @@ bool LaunchBorderlands() {
 	return true;
 }
 
+// Generates an empty config file if one doesn't already exist
 bool CreateConfigFile(std::string file_name) {
+	ifstream ifs(file_name.c_str());
 
+	if (!ifs.good() ) { // If the config file doesn't exist
+		std::ofstream ofs(file_name.c_str()); // Make it
+
+		ofs.close();
+		ifs.close();
+		return true; 	// Return true to show that we successfully made the file
+	} else {
+		ifs.close();
+		return false;	// Return false to show we didn't make a file
+	}
+}
+
+// Writes a property and a value to a file
+bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value) {
+	ifstream ifs(file_name.c_str());
+
+	if (!ifs.good() ) { // If the config file doesn't exist
+		ifs.close();
+		return false;
+	} else {
+		std::ofstream outfile(file_name.c_str(), std::ios_base::app);
+
+		ofs << prop_name + " " + prop_value;
+
+		ofs.close();
+		ifs.close();
+		return true;
+	}
+}
+
+std::string ReadProperty(std::string file_name, std::string prop_name) {
+	ifstream ifs(file_name.c_str());
+
+	if (!ifs.good() ) { // If the config file doesn't exist
+		ifs.close();
+		return false;
+	} else {
+
+
+	}
 }
