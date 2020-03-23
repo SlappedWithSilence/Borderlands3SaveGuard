@@ -9,3 +9,7 @@ After doing that, you must create a shortcut file to your Borderlands 3 executab
 Once you have place the executable and the BL3 shortcut BOTH INSIDE THE SAVE FOLDER YOU WISH TO BACK UP, run the executable. It will back up your saves BEFORE launching the game, then continue to back up the saves every 10 minutes while you play until you close the console window.
 
 I DO NOT PROVIDE ANY WARRANTY FOR THIS SOFTWARE. YOU MUST BACK UP YOUR FILES BY HAND BEFORE USING THIS PROGRAM TO ENSURE IT DOES NOT DESTROY YOUR SAVE FILES.
+
+BUILDING SAVEGUARD ON YOUR OWN MACHINE
+
+If you would like to build Save Guard on your own machine, you must have access to C++17. Simply run the included makefile through CMD after installing a compatible version of GCC. I use MinGW.
