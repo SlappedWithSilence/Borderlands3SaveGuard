@@ -22,16 +22,23 @@ namespace fs = std::filesystem;
 int BackupSaves();
 bool LaunchBorderlands();
 bool CopyFile(std::string source, std::string dest);
+bool CreateConfigFile(std::string file_name);
 
 // Const values
 
+// Filename Constants
 const std::string BACKUP_FOLDER_PREFIX = "backups/";
 const std::string SHORTCUT_FILE_NAME = "Borderlands3.lnk";
 const std::string PROFILE_FILE_NAME = "profile.sav";
 const std::string SAVE_EXTENSION = ".sav";
+
+// Prompt Constants
 const std::string BORDERLANDS_LAUNCH_FAILED = "Launching Borderlands failed, is the correct shortcut present in this folder?\n";
-const int TIME_TO_BACKUP = 10 * 60; // Amount of time the program will wait before calling BackupSaves().
+
+// Functionality Constants
+const int TIME_TO_BACKUP      = 10 * 60; // Amount of time the program will wait before calling BackupSaves().
 const int MAX_NUMBER_OF_SAVES = 5;
+const int NUMBER_OF_BACKUPS   = 1;
 
 int main() {
 	// Intro Prompt
@@ -57,8 +64,6 @@ int main() {
 			std::cout << "Backing up...";
 			std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
 			std:: cout << " done!" << std::endl;
-		} else {
-			//std::cout << ".";
 		}
 	}
 }
@@ -79,7 +84,7 @@ int BackupSaves() {
 
 		} else {
 			ifs.close();
-			std::cout << "Couldn't locate " << file_name << "!\n";
+			std::cout << "\nCouldn't locate " << file_name << "!\n";
 		}
 	}
 
@@ -97,7 +102,7 @@ bool CopyFile(std::string source, std::string dest) {
  		dst.close();
  		src.close();
 	} else {
-		std::cout << "Failed to read " << source << "\n";
+		std::cout << "\nFailed to read " << source << "\n";
 		src.close();
 		return false;
 	}
@@ -121,4 +126,8 @@ bool LaunchBorderlands() {
 
 
 	return true;
+}
+
+bool CreateConfigFile(std::string file_name) {
+
 }
