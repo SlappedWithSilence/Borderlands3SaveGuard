@@ -15,15 +15,14 @@
 #include <io.h>
 #include <vector>
 
+#include "as_io.h"
+
 //Forward declerations
 
 int BackupSaves();
 bool LaunchBorderlands();
+bool startup();
 
-bool CopyFile(std::string source, std::string dest);
-
-bool CreateConfigFile(std::string file_name);
-bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value);
 
 // Directory Constants
 const std::string ROOT_FOLDER_PREFIX   = "SaveGuard/";
@@ -45,23 +44,8 @@ const int MAX_NUMBER_OF_SAVES = 5;
 const int NUMBER_OF_BACKUPS   = 1;
 
 int main() {
-	// Intro Prompt
 
-	std::cout << "Please note, this program will not run correctly if it is not inside your Borderlands 3 save folder." << std::endl;
-	std::cout << "If it isn't, please close this window and move it now." << std::endl;
-
-	// Startup backup
-	mkdir(ROOT_FOLDER_PREFIX.c_str());
-	mkdir(BACKUP_FOLDER_PREFIX.c_str());
-	mkdir(CONFIG_FOLDER_PREFIX.c_str();
-
-	
-	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
-
-	if (!LaunchBorderlands()) {
-		std::cout << BORDERLANDS_LAUNCH_FAILED;
-		return -1;
-	}
+	if ( !startup() ) return -1;
 
 	auto last_backup = std::time(0);;
 
@@ -76,6 +60,27 @@ int main() {
 	}
 }
 
+bool startup() {
+	// Intro Prompt
+	std::cout << "Please note, this program will not run correctly if it is not inside your Borderlands 3 save folder." << std::endl;
+	std::cout << "If it isn't, please close this window and move it now." << std::endl;
+
+	//Ensure that the folder tree exists
+	mkdir(ROOT_FOLDER_PREFIX.c_str());
+	mkdir(BACKUP_FOLDER_PREFIX.c_str());
+	mkdir(CONFIG_FOLDER_PREFIX.c_str());
+
+	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl; // Make an initial backup before we run anything
+
+	// Try to launch Borderlands. If it doesn't work, exit the function (and ideally the entire program)
+	if (!LaunchBorderlands()) {
+		std::cout << BORDERLANDS_LAUNCH_FAILED;
+		return false;
+	}
+
+	return true;
+}
+
 int BackupSaves() {
 	int successes = 0;
 
@@ -88,7 +93,9 @@ int BackupSaves() {
 		if(ifs.good()) {
 			ifs.close();
 
-			if (CopyFile(file_name, ("backups/" + file_name) )) successes++;
+			std::string location = BACKUP_FOLDER_PREFIX + file_name;
+
+			if (CopyFile(file_name, location ) ) successes++;
 
 		} else {
 			ifs.close();
@@ -96,28 +103,9 @@ int BackupSaves() {
 		}
 	}
 
-	CopyFile(PROFILE_FILE_NAME, ("backups/" + PROFILE_FILE_NAME) ); // Backup the profile save file
+	CopyFile(PROFILE_FILE_NAME, BACKUP_FOLDER_PREFIX + PROFILE_FILE_NAME); // Backup the profile save file
 
 	return successes;
-}
-
-bool CopyFile(std::string source, std::string dest) {
-	std::ifstream  src(source,    std::ios::binary);
-
-	if (src.good()) {
- 		std::ofstream  dst(dest,   std::ios::binary);
- 		dst << src.rdbuf();
- 		dst.close();
- 		src.close();
-	} else {
-		std::cout << "\nFailed to read " << source << "\n";
-		src.close();
-		return false;
-	}
-
-
-
-    return true;
 }
 
 bool LaunchBorderlands() {
@@ -134,62 +122,4 @@ bool LaunchBorderlands() {
 
 
 	return true;
-}
-
-// Generates an empty config file if one doesn't already exist
-bool CreateConfigFile(std::string file_name) {
-	std::ifstream ifs(file_name.c_str());
-
-	if (!ifs.good() ) { // If the config file doesn't exist
-		std::ofstream ofs(file_name.c_str()); // Make it
-
-		ofs.close();
-		ifs.close();
-		return true; 	// Return true to show that we successfully made the file
-	} else {
-		ifs.close();
-		return false;	// Return false to show we didn't make a file
-	}
-}
-
-// Writes a property and a value to a file
-bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value) {
-	std::ifstream ifs(file_name.c_str());
-
-	if (!ifs.good() ) { // If the config file doesn't exist
-		ifs.close();
-		return false;
-	} else {
-		std::ofstream ofs(file_name.c_str(), std::ios_base::app);
-
-		ofs << prop_name + " " + prop_value;
-
-		ofs.close();
-		ifs.close();
-		return true;
-	}
-}
-
-
-std::string ReadProperty(std::string file_name, std::string prop_name) {
-	std::ifstream ifs(file_name.c_str());
-
-	if (!ifs.good() ) { // If the config file doesn't exist
-		ifs.close();
-		return "error";
-
-	} else {
-		std::string input;
-		std::vector<std::string> terms;
-
-		while (ifs >> input) {
-			terms.push_back(input);
-		}
-
-		for (int i = 0; i < terms.size(); i++) {
-			if (terms.at(i) == prop_name) return terms.at(i+1);
-		}
-
-		return "not found";
-	}
 }
