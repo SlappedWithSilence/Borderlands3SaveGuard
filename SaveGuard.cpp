@@ -171,9 +171,20 @@ std::string ReadProperty(std::string file_name, std::string prop_name) {
 
 	if (!ifs.good() ) { // If the config file doesn't exist
 		ifs.close();
-		return false;
+		return "error";
+		
 	} else {
+		std::string input;
+		std::vector<std::string> terms;
 
+		while (ifs >> input) {
+			terms.push_back(input);
+		}
 
+		for (int i = 0; i < terms.size(); i++) {
+			if (terms.at(i) == prop_name) return terms.at(i+1);
+		}
+
+		return "not found";
 	}
 }
