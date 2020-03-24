@@ -7,15 +7,13 @@
 // C++ Libs
 #include <ctime>
 #include <exception>
-#include <filesystem>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <windows.h>
 #include <stdio.h>
 #include <io.h>
-
-namespace fs = std::filesystem;
+#include <vector>
 
 //Forward declerations
 
@@ -25,12 +23,14 @@ bool LaunchBorderlands();
 bool CopyFile(std::string source, std::string dest);
 
 bool CreateConfigFile(std::string file_name);
-bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value)
+bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value);
 
-// Const values
+// Directory Constants
+const std::string ROOT_FOLDER_PREFIX   = "SaveGuard/";
+const std::string BACKUP_FOLDER_PREFIX = ROOT_FOLDER_PREFIX + "backups/";
+const std::string CONFIG_FOLDER_PREFIX = ROOT_FOLDER_PREFIX + "config/";
 
 // Filename Constants
-const std::string BACKUP_FOLDER_PREFIX = "backups/";
 const std::string SHORTCUT_FILE_NAME   = "Borderlands3.lnk";
 const std::string PROFILE_FILE_NAME    = "profile.sav";
 const std::string CONFIG_FILE_NAME     = "config.cfg";
@@ -51,7 +51,11 @@ int main() {
 	std::cout << "If it isn't, please close this window and move it now." << std::endl;
 
 	// Startup backup
-	mkdir("backups");
+	mkdir(ROOT_FOLDER_PREFIX.c_str());
+	mkdir(BACKUP_FOLDER_PREFIX.c_str());
+	mkdir(CONFIG_FOLDER_PREFIX.c_str();
+
+	
 	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
 
 	if (!LaunchBorderlands()) {
@@ -134,7 +138,7 @@ bool LaunchBorderlands() {
 
 // Generates an empty config file if one doesn't already exist
 bool CreateConfigFile(std::string file_name) {
-	ifstream ifs(file_name.c_str());
+	std::ifstream ifs(file_name.c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
 		std::ofstream ofs(file_name.c_str()); // Make it
@@ -150,13 +154,13 @@ bool CreateConfigFile(std::string file_name) {
 
 // Writes a property and a value to a file
 bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value) {
-	ifstream ifs(file_name.c_str());
+	std::ifstream ifs(file_name.c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
 		ifs.close();
 		return false;
 	} else {
-		std::ofstream outfile(file_name.c_str(), std::ios_base::app);
+		std::ofstream ofs(file_name.c_str(), std::ios_base::app);
 
 		ofs << prop_name + " " + prop_value;
 
@@ -166,13 +170,14 @@ bool WriteProperty(std::string file_name, std::string prop_name, std::string pro
 	}
 }
 
+
 std::string ReadProperty(std::string file_name, std::string prop_name) {
-	ifstream ifs(file_name.c_str());
+	std::ifstream ifs(file_name.c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
 		ifs.close();
 		return "error";
-		
+
 	} else {
 		std::string input;
 		std::vector<std::string> terms;
