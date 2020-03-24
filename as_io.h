@@ -3,7 +3,7 @@
 
 bool CopyFile(std::string source, std::string dest);
 
-bool CreateConfigFile(std::string file_name);
+bool CreateConfigFile(std::string file_name, std::string path);
 bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value);
 std::string ReadProperty(std::string file_name, std::string prop_name);
 
@@ -25,11 +25,11 @@ bool CopyFile(std::string source, std::string dest) {
 }
 
 // Generates an empty config file if one doesn't already exist
-bool CreateConfigFile(std::string file_name) {
-	std::ifstream ifs(file_name.c_str());
+bool CreateConfigFile(std::string file_name, std::string path) {
+	std::ifstream ifs( (path + file_name).c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
-		std::ofstream ofs(file_name.c_str()); // Make it
+		std::ofstream ofs((path + file_name).c_str()); // Make it
 
 		ofs.close();
 		ifs.close();
@@ -50,7 +50,7 @@ bool WriteProperty(std::string file_name, std::string prop_name, std::string pro
 	} else {
 		std::ofstream ofs(file_name.c_str(), std::ios_base::app);
 
-		ofs << prop_name + " " + prop_value;
+		ofs << prop_name + " " + prop_value << std::endl;
 
 		ofs.close();
 		ifs.close();
@@ -58,7 +58,7 @@ bool WriteProperty(std::string file_name, std::string prop_name, std::string pro
 	}
 }
 
-
+// Reads a property and returns it
 std::string ReadProperty(std::string file_name, std::string prop_name) {
 	std::ifstream ifs(file_name.c_str());
 
