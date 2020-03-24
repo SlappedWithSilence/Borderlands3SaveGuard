@@ -4,7 +4,7 @@ In order to use this program, you must drop it into your BL3 save folder. For ex
 
 
 
-C:\Users\<my_name>\Documents\My games\Borderlands 3\Saved\SaveGames\701123231\
+C:\Users\my_name\Documents\My games\Borderlands 3\Saved\SaveGames\701123231\
 
 
 
