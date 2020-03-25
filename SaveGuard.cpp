@@ -38,22 +38,22 @@ const std::string SAVE_EXTENSION       = ".sav";
 // Prompt Constants
 const std::string BORDERLANDS_LAUNCH_FAILED = "Launching Borderlands failed, is the correct shortcut present in this folder?\n";
 
-// Functionality Constants
-const int TIME_TO_BACKUP      = 10 * 60; // Amount of time the program will wait before calling BackupSaves().
-const int MAX_NUMBER_OF_SAVES = 5;
-const int NUMBER_OF_BACKUPS   = 1;
+// Default Functionality Constants
+int TIME_TO_BACKUP      = 10 * 60; // Amount of time the program will wait before calling BackupSaves().
+int MAX_NUMBER_OF_SAVES = 5;
+int NUMBER_OF_BACKUPS   = 1;
 
 int main() {
 
-	if ( !startup() ) return -1;
+	if ( !startup() ) return -1;     // If startup fails for any reason, exit the program
 
-	auto last_backup = std::time(0);;
+	auto last_backup = std::time(0); // I initialize the backup timestamp to the current time.
 
-	while(true) {
+	while(true) {					 // Infinite loop. Doesn't end until the user closes to program.
 		if (std::time(0) - last_backup >= TIME_TO_BACKUP) {
 			last_backup = std::time(0);;
 
-			std::cout << "Backing up...";
+			std::cout <<  "Backing up...";
 			std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl;
 			std:: cout << " done!" << std::endl;
 		}
@@ -70,24 +70,29 @@ bool startup() {
 	mkdir(BACKUP_FOLDER_PREFIX.c_str());
 	mkdir(CONFIG_FOLDER_PREFIX.c_str());
 
+	// Generate default config file
+	if ( CreateConfigFile(CONFIG_FILE_NAME, CONFIG_FOLDER_PREFIX) ) { // If there was no config file previously
+ 
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period", "10"     );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves", "5"  );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups", "1");
+
+	} else {
+		std::cout << "Props loaded: " << std::endl;
+		TIME_TO_BACKUP      = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period"));       
+		MAX_NUMBER_OF_SAVES = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves")); 
+		NUMBER_OF_BACKUPS   = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups"));
+	}
+
 	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl; // Make an initial backup before we run anything
 
 	// Try to launch Borderlands. If it doesn't work, exit the function (and ideally the entire program)
 	if (!LaunchBorderlands()) {
 		std::cout << BORDERLANDS_LAUNCH_FAILED;
-		//return false;
+		return false;
 	}
 
-	// Generate default config file
-	if ( CreateConfigFile(CONFIG_FILE_NAME, CONFIG_FOLDER_PREFIX) ) {
-		std::string config_file_name = CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME;
-
-		WriteProperty(config_file_name, "save_period", "10");
-		WriteProperty(config_file_name, "number_of_saves", "5");
-		WriteProperty(config_file_name, "number_of_backups", "1");
-	}
-
-	return false;
+	return true;
 }
 
 int BackupSaves() {
