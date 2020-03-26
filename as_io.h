@@ -1,12 +1,20 @@
+/* IO functions specially made for SaveGuard
+ * Written by Aaron Sigal
+ *
+ *
+*/
+
 #ifndef AS_IO_H
 #define AS_IO_H
 
+// Function Prototypes
 bool CopyFile(std::string source, std::string dest);
-
 bool CreateConfigFile(std::string file_name, std::string path);
 bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value);
 std::string ReadProperty(std::string file_name, std::string prop_name);
 
+
+//Copies a file from a given path to another path.
 bool CopyFile(std::string source, std::string dest) {
 	std::ifstream  src(source,    std::ios::binary);
 
@@ -58,7 +66,7 @@ bool WriteProperty(std::string file_name, std::string prop_name, std::string pro
 	}
 }
 
-// Reads a property and returns it
+// Reads a property and returns it as a string. If you need it to be another type, convert it yourself
 std::string ReadProperty(std::string file_name, std::string prop_name) {
 	std::ifstream ifs(file_name.c_str());
 

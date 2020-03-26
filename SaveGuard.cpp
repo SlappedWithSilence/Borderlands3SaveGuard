@@ -73,9 +73,10 @@ bool startup() {
 	// Generate default config file
 	if ( CreateConfigFile(CONFIG_FILE_NAME, CONFIG_FOLDER_PREFIX) ) { // If there was no config file previously
  
-		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period", "10"     );
-		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves", "5"  );
-		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups", "1");
+		// Write default values to the config file
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period",       TIME_TO_BACKUP      );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves",   MAX_NUMBER_OF_SAVES );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups", NUMBER_OF_BACKUPS   );
 
 	} else {
 		std::cout << "Props loaded: " << std::endl;
@@ -95,6 +96,7 @@ bool startup() {
 	return true;
 }
 
+// Backs up all relevent save files.
 int BackupSaves() {
 	int successes = 0;
 
