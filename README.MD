@@ -27,7 +27,7 @@ SaveGuard is developed using C++17. It relies on no libraries and has to externa
 
 ### Compiling
 
-It's easy to compile SaveGuard. Run make.bat and it will do all the work for you.
+It's easy to compile SaveGuard. Make sure you have a working C++17-capable compiler and run make.bat. It will do all the work for you.
 
 ## Contributing
 
