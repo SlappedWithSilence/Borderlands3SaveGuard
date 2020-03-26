@@ -1,21 +1,48 @@
-**USAGE:**
+# SaveGuard for Borderlands 3
 
-In order to use this program, you must drop it into your BL3 save folder. For example, mine is located at:
+SaveGuard for Borderlands 3 (or simply SaveGuard) is a simple and flexible tool for automatically creating local backups of your Borderlands3 save files. I wrote this tool after many of my friends experienced crashes on their systems that resulted in permanently corrupted save files. The Steam Cloud Save feature was no help, as it had already backed up their corrupted saves! SaveGuard is an extra layer of semi-automated protection against save-file corruption.
+
+## Getting Started
+
+### Prerequisites
+
+There are no pre-requisites for SaveGuard. All you need is a pre-existing save file for Borderlands 3 and a working Windows installation!
+
+### Using SaveGuard
+
+There's no need to run an installer to gain access to SaveGuard. Simply drop any release version of SaveGuard directly into your save folder and run it from there. Your save folder's path should look something like this:
+
+`C:\Users\Aaron\Documents\My games\Borderlands 3\Saved\SaveGames\76561198093957\`
+
+Once you've placed SaveGuard in the correct folder, you must place a shortcut to your Borderlands 3.exe in the folder with it. On my system using the Steam version of Borderlands 3, it is located at:
+
+`D:\Games\SteamLibrary\steamapps\common\Borderlands 3\OakGame\Binaries\Win64`
+
+Ensure that this shortcut is precisely named `Borderlands 3.lnk`.
 
 
+## Developing SaveGuard
 
-C:\Users\my_name\Documents\My games\Borderlands 3\Saved\SaveGames\701123231\
+SaveGuard is developed using C++17. It relies on no libraries and has to external dependencies. If you would like to play around with SaveGuard's code, simply clone it onto your machine from here: `https://github.com/AaronSigal/Borderlands3SaveGuard/`
 
+### Compiling
 
+It's easy to compile SaveGuard. Run make.bat and it will do all the work for you.
 
-After doing that, you must create a shortcut file to your Borderlands 3 executable and put it in the same folder. If you are using the Epic Games launcher, you must go and find it in your copy of the Epic Games library. If you are using the Steam version, it should be within the Borderlands 3 folder inside your steam library. The shortcut must be named exactly "Borderlands3.lnk" without the quotes.
+## Contributing
 
-Once you have place the executable and the BL3 shortcut BOTH INSIDE THE SAVE FOLDER YOU WISH TO BACK UP, run the executable. It will back up your saves BEFORE launching the game, then continue to back up the saves every 10 minutes while you play until you close the console window.
+I am open to accepting contributions to SaveGuard. I do not currently have a formal system for working through this, so bear with me. 
 
-*I DO NOT PROVIDE ANY WARRANTY FOR THIS SOFTWARE. YOU MUST BACK UP YOUR FILES BY HAND BEFORE USING THIS PROGRAM TO ENSURE IT DOES NOT DESTROY YOUR SAVE FILES.
+## Authors
 
+* **Aaron Sigal** - *Initial work* - [AaronSigal](https://github.com/AaronSigal)
 
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
-**BUILDING SAVEGUARD ON YOUR OWN MACHINE**
+## License
 
-If you would like to build Save Guard on your own machine, you must have access to C++17. Simply run the included makefile through CMD after installing a compatible version of GCC. I use MinGW.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* GearBox for not designing a stable game that doesn't write directly to the only copy of its savefiles. Lord knows this wouldn't be necessary if they did.
