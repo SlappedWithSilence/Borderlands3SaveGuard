@@ -74,9 +74,9 @@ bool startup() {
 	if ( CreateConfigFile(CONFIG_FILE_NAME, CONFIG_FOLDER_PREFIX) ) { // If there was no config file previously
  
 		// Write default values to the config file
-		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period",       TIME_TO_BACKUP      );
-		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves",   MAX_NUMBER_OF_SAVES );
-		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups", NUMBER_OF_BACKUPS   );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period",       std::to_string(TIME_TO_BACKUP)      );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves",   std::to_string(MAX_NUMBER_OF_SAVES) );
+		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups", std::to_string(NUMBER_OF_BACKUPS)   );
 
 	} else {
 		std::cout << "Props loaded: " << std::endl;
