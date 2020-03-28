@@ -1,13 +1,19 @@
 #ifndef AS_IO_H
 #define AS_IO_H
 
-bool CopyFile(std::string source, std::string dest);
+// File IO
+bool CopyFile(const std::string &source, const std::string &dest);
+bool CreateConfigFile(const std::string &file_name, const std::string &path);
 
-bool CreateConfigFile(std::string file_name, std::string path);
-bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value);
-std::string ReadProperty(std::string file_name, std::string prop_name);
+// Property IO
+bool WriteProperty(const std::string &file_name, const std::string &prop_name, const std::string &prop_value);
+std::string ReadProperty(const std::string &file_name, const std::string &prop_name);
 
-bool CopyFile(std::string source, std::string dest) {
+// Console IO
+std::string log(const std::string &text);
+std::string err(const std::string &text);
+
+bool CopyFile(const std::string &source, const std::string &dest) {
 	std::ifstream  src(source,    std::ios::binary);
 
 	if (src.good()) {
@@ -25,7 +31,7 @@ bool CopyFile(std::string source, std::string dest) {
 }
 
 // Generates an empty config file if one doesn't already exist
-bool CreateConfigFile(std::string file_name, std::string path) {
+bool CreateConfigFile(const std::string &file_name, const std::string &path) {
 	std::ifstream ifs( (path + file_name).c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
@@ -41,7 +47,7 @@ bool CreateConfigFile(std::string file_name, std::string path) {
 }
 
 // Writes a property and a value to a file
-bool WriteProperty(std::string file_name, std::string prop_name, std::string prop_value) {
+bool WriteProperty(const std::string &file_name, const std::string &prop_name, const std::string &prop_value) {
 	std::ifstream ifs(file_name.c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
@@ -59,7 +65,7 @@ bool WriteProperty(std::string file_name, std::string prop_name, std::string pro
 }
 
 // Reads a property and returns it
-std::string ReadProperty(std::string file_name, std::string prop_name) {
+std::string ReadProperty(const std::string &file_name, const std::string &prop_name) {
 	std::ifstream ifs(file_name.c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
@@ -80,6 +86,13 @@ std::string ReadProperty(std::string file_name, std::string prop_name) {
 
 		return "not found";
 	}
+}
+
+std::string log(const std::string &text, std:time_t tt) {
+
+}
+std::string err(const std::string &text) {
+
 }
 
 #endif
