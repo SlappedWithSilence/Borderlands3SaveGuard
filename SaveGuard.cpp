@@ -45,7 +45,11 @@ int NUMBER_OF_BACKUPS   = 1;
 
 int main() {
 
-	if ( !startup() ) return -1;     // If startup fails for any reason, exit the program
+	if ( !startup() ) {
+		std::string i;
+		std::cin >> i; 
+		return -1;     // If startup fails for any reason, exit the program
+	}
 
 	auto last_backup = std::time(0); // I initialize the backup timestamp to the current time.
 
