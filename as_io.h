@@ -20,7 +20,7 @@ std::string log(const std::string &text);
 std::string err(const std::string &text);
 
 bool CopyFile(const std::string &source, const std::string &dest) {
->>>>>>> dev_feature_better_log
+
 	std::ifstream  src(source,    std::ios::binary);
 
 	if (src.good()) {
@@ -97,9 +97,10 @@ std::string ReadProperty(const std::string &file_name, const std::string &prop_n
 	}
 }
 
-std::string log(const std::string &text, std:time_t tt) {
+std::string log(const std::string &text, std::time_t tt) {
 
 }
+
 std::string err(const std::string &text) {
 
 }

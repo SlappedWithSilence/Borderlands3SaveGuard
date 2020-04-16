@@ -71,8 +71,8 @@ bool startup() {
 
 	//Ensure that the folder tree exists
 	mkdir(ROOT_FOLDER_PREFIX.c_str());
-	mkdir(BACKUP_FOLDER_PREFIX.c_str());
 	mkdir(CONFIG_FOLDER_PREFIX.c_str());
+
 
 	// Generate default config file
 	if ( CreateConfigFile(CONFIG_FILE_NAME, CONFIG_FOLDER_PREFIX) ) { // If there was no config file previously
@@ -89,23 +89,26 @@ bool startup() {
 		NUMBER_OF_BACKUPS   = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups"));
 	}
 
+	// Make backup folders
+	mkdir(BACKUP_FOLDER_PREFIX.c_str());
+	for (int i = 0; i < NUMBER_OF_BACKUPS; i++) {
+		mkdir((BACKUP_FOLDER_PREFIX + "/" + std::to_string(i)).c_str());
+	}
+
 	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl; // Make an initial backup before we run anything
 
 	// Try to launch Borderlands. If it doesn't work, exit the function (and ideally the entire program)
 	if (!LaunchBorderlands()) {
 		std::cout << BORDERLANDS_LAUNCH_FAILED;
-		return false;
+		//return false;
 	}
 
 	return true;
 }
 
-// Backs up all relevent save files.
-int BackupSaves() {
-	int successes = 0;
-
+void RootFolderBackup(int &successes) {
 	for (int i = 0; i < MAX_NUMBER_OF_SAVES; ++i) {
-		std::string file_name = std::to_string(i + 1) + SAVE_EXTENSION;
+		std::string file_name = std::to_string(i) + SAVE_EXTENSION;
 
 		std::ifstream ifs;
 		ifs.open(file_name);
@@ -113,7 +116,7 @@ int BackupSaves() {
 		if(ifs.good()) {
 			ifs.close();
 
-			std::string location = BACKUP_FOLDER_PREFIX + file_name;
+			std::string location = BACKUP_FOLDER_PREFIX + "0/" + file_name;
 
 			if (CopyFile(file_name, location ) ) successes++;
 
@@ -124,6 +127,45 @@ int BackupSaves() {
 	}
 
 	CopyFile(PROFILE_FILE_NAME, BACKUP_FOLDER_PREFIX + PROFILE_FILE_NAME); // Backup the profile save file
+}
+
+// Backs up all relevent save files.
+int BackupSaves() {
+	int successes = 0;
+	if (NUMBER_OF_BACKUPS == 1) { // Just one backup
+		RootFolderBackup(successes);
+
+	} else if (NUMBER_OF_BACKUPS > 1) { // Maintain multiple backups
+		for (int j = NUMBER_OF_BACKUPS - 1; j >= 1; --j) {
+
+			for (int i = 0; i < MAX_NUMBER_OF_SAVES; ++i) {
+				std::string file_name =  std::to_string(i) + SAVE_EXTENSION;
+
+				std::ifstream ifs;
+				ifs.open(file_name);
+
+				if(ifs.good()) {
+					ifs.close();
+
+					std::string location = BACKUP_FOLDER_PREFIX + std::to_string(j) + "/" + file_name;
+
+					if (CopyFile(BACKUP_FOLDER_PREFIX + std::to_string(j - 1) + "/" + file_name, location ) ) successes++;
+
+				} else {
+					ifs.close();
+					std::cout << "\nCouldn't locate " << file_name << " for backup #" + std::to_string(j) + "\n";
+				}
+			}
+		}
+
+		RootFolderBackup(successes);
+
+	} else {
+		// Clearly something went wrong, 
+		return -1;
+	}
+
+	
 
 	return successes;
 }
