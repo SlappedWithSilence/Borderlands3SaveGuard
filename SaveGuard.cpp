@@ -83,7 +83,6 @@ bool startup() {
 		WriteProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups", std::to_string(NUMBER_OF_BACKUPS)   );
 
 	} else {
-		std::cout << "Props loaded: " << std::endl;
 		TIME_TO_BACKUP      = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "save_period"));       
 		MAX_NUMBER_OF_SAVES = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_saves")); 
 		NUMBER_OF_BACKUPS   = std::stoi(ReadProperty(CONFIG_FOLDER_PREFIX + CONFIG_FILE_NAME, "number_of_backups"));
@@ -95,7 +94,8 @@ bool startup() {
 		mkdir((BACKUP_FOLDER_PREFIX + "/" + std::to_string(i)).c_str());
 	}
 
-	std:: cout << "Total number of characters backed up: " << BackupSaves() << std::endl; // Make an initial backup before we run anything
+	int chars_backed_up = BackupSaves();
+	std:: cout << "Total number of characters backed up: " << chars_backed_up << std::endl; // Make an initial backup before we run anything
 
 	// Try to launch Borderlands. If it doesn't work, exit the function (and ideally the entire program)
 	if (!LaunchBorderlands()) {
@@ -144,7 +144,7 @@ int BackupSaves() {
 
 
 				std::ifstream ifs;
-				ifs.open(file_location + file_name);
+				ifs.open(file_location + file_name); // Tries to open the current file we're backing up
 
 				if(ifs.good()) {
 					ifs.close();
@@ -164,6 +164,7 @@ int BackupSaves() {
 
 	} else {
 		// Clearly something went wrong, 
+		std::cout << "[Error]: Something went wrong, blame Claptrap." << std::endl;
 		return -1;
 	}
 
