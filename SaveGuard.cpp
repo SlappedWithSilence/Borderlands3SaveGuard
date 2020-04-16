@@ -140,16 +140,18 @@ int BackupSaves() {
 
 			for (int i = 0; i < MAX_NUMBER_OF_SAVES; ++i) {
 				std::string file_name =  std::to_string(i) + SAVE_EXTENSION;
+				std::string file_location = BACKUP_FOLDER_PREFIX + std::to_string(j - 1) + "/";
+
 
 				std::ifstream ifs;
-				ifs.open(file_name);
+				ifs.open(file_location + file_name);
 
 				if(ifs.good()) {
 					ifs.close();
 
-					std::string location = BACKUP_FOLDER_PREFIX + std::to_string(j) + "/" + file_name;
+					std::string file_destination = BACKUP_FOLDER_PREFIX + std::to_string(j) + "/" + file_name;
 
-					if (CopyFile(BACKUP_FOLDER_PREFIX + std::to_string(j - 1) + "/" + file_name, location ) ) successes++;
+					if (CopyFile(file_location + file_name, file_destination ) ) successes++;
 
 				} else {
 					ifs.close();
