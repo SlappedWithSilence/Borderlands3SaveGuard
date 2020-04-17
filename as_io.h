@@ -1,5 +1,19 @@
+/* IO functions specially made for SaveGuard
+ * Written by Aaron Sigal
+ *
+ *
+*/
+
 #ifndef AS_IO_H
 #define AS_IO_H
+
+#include <string>
+
+
+//Constants
+const std::string ERROR_PREFIX = "[ERROR]: ";
+const std::string WARNING_PREFIX = "[WARNING]: ";
+
 
 // File IO
 bool CopyFile(const std::string &source, const std::string &dest);
@@ -14,6 +28,7 @@ std::string log(const std::string &text);
 std::string err(const std::string &text);
 
 bool CopyFile(const std::string &source, const std::string &dest) {
+
 	std::ifstream  src(source,    std::ios::binary);
 
 	if (src.good()) {
@@ -64,8 +79,10 @@ bool WriteProperty(const std::string &file_name, const std::string &prop_name, c
 	}
 }
 
+
 // Reads a property and returns it
 std::string ReadProperty(const std::string &file_name, const std::string &prop_name) {
+
 	std::ifstream ifs(file_name.c_str());
 
 	if (!ifs.good() ) { // If the config file doesn't exist
@@ -88,11 +105,16 @@ std::string ReadProperty(const std::string &file_name, const std::string &prop_n
 	}
 }
 
-std::string log(const std::string &text, std:time_t tt) {
+std::string log(const std::string &text, std::time_t tt) {
 
 }
-std::string err(const std::string &text) {
 
+std::string err(const std::string &text) {
+	return ERROR_PREFIX + text;
+}
+
+std::string war(const std::string &text) {
+	return WARNING_PREFIX + text;
 }
 
 #endif
