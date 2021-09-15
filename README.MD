@@ -12,7 +12,7 @@ There are no pre-requisites for SaveGuard. All you need is a pre-existing save f
 
 There's no need to run an installer to gain access to SaveGuard. Simply drop any release version of SaveGuard directly into your save folder and run it from there. Your save folder's path should look something like this:
 
-`C:\Users\Aaron\Documents\My games\Borderlands 3\Saved\SaveGames\76561198093957\`
+`C:\Users\Name\Documents\My games\Borderlands 3\Saved\SaveGames\76561198093957\`
 
 Once you've placed SaveGuard in the correct folder, you must place a shortcut to your Borderlands 3.exe in the folder with it. On my system using the Steam version of Borderlands 3, it is located at:
 
@@ -23,7 +23,7 @@ Ensure that this shortcut is precisely named `Borderlands 3.lnk`.
 
 ## Developing SaveGuard
 
-SaveGuard is developed using C++17. It relies on no libraries and has to external dependencies. If you would like to play around with SaveGuard's code, simply clone it onto your machine from here: `https://github.com/AaronSigal/Borderlands3SaveGuard/`
+SaveGuard is developed using C++17. It relies on no libraries and has to external dependencies. If you would like to play around with SaveGuard's code, simply clone it onto your machine.
 
 ### Compiling
 
@@ -34,8 +34,6 @@ It's easy to compile SaveGuard. Make sure you have a working C++17-capable compi
 I am open to accepting contributions to SaveGuard. I do not currently have a formal system for working through this, so bear with me. 
 
 ## Authors
-
-* **Aaron Sigal** - *Initial work* - [AaronSigal](https://github.com/AaronSigal)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
